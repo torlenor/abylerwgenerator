@@ -24,20 +24,19 @@ void AARWWorld::Tick(float DeltaTime)
 
 }
 
-bool AARWWorld::Setup(FString pointsFile, FString trianglesFile) 
+bool AARWWorld::Setup(FString pointsFile, FString trianglesFile, FString heightMapDirectory) 
 {
     m_worldStore = NewObject<UARWWorldStore>(this);
 
     if (m_worldStore) {
-        m_worldStore->Setup(pointsFile);
-        m_isSetup = true;
-        return true;
+        m_isSetup = m_worldStore->Setup(pointsFile, heightMapDirectory);
+        return m_isSetup;
     } else {
         return false;
     }
 }
 
-bool AARWWorld::Start()
+bool AARWWorld::Start(const int xSegments, const int ySegments)
 {
     if (!m_isSetup) {
         return false;
@@ -45,13 +44,20 @@ bool AARWWorld::Start()
 
     static float m2cm=100;
 
-    FARWWorldMeshData worldMeshData = m_worldStore->getWorldMeshData();
+    for (int i=0; i<xSegments; i++) {
+        for (int j=0; j<ySegments; j++) {
 
-    for (int i=0; i<4; i++) {
-        for (int j=0; j<4; j++) {
+            FARWWorldMeshData worldMeshData = m_worldStore->getWorldMeshData(i, j);
+            //FARWWorldMeshData worldMeshData = m_worldStore->getWorldMeshData();
+
+	        //AARWWorldSegment* segment = GetWorld()->SpawnActor<AARWWorldSegment>(AARWWorldSegment::StaticClass(), 
+            //                                                                     FVector(-500.0f*m2cm + i*500.0f*m2cm, -500.0f*m2cm + j*500.0f*m2cm, 10.0f), 
+            //                                                                     FRotator(0.0f));
+
 	        AARWWorldSegment* segment = GetWorld()->SpawnActor<AARWWorldSegment>(AARWWorldSegment::StaticClass(), 
-                                                                                 FVector(2*-500.0f*m2cm + i*500.0f*m2cm, 2*-500.0f*m2cm + j*500.0f*m2cm, 10.0f), 
+                                                                                 FVector( -m2cm*500*xSegments/2 + 0.0f, -m2cm*500*xSegments/2 + 0.0f, 10.0f), 
                                                                                  FRotator(0.0f));
+
             if (segment) {
                 segment->Spawn(worldMeshData);
                 if (Material) {

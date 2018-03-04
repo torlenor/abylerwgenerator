@@ -28,10 +28,10 @@ public:
 	UMaterialInterface* Material;
 
 	UFUNCTION(BlueprintCallable, Category = "AbyleRWGenerator")
-	bool Start();
+	bool Start(const int xSegments=2, const int ySegments=2);
 
     UFUNCTION(BlueprintCallable, Category = "AbyleRWGenerator")
-    bool Setup(FString pointsFile, FString trianglesFile);
+    bool Setup(FString pointsFile, FString trianglesFile, FString heightMapDirectory);
 
 protected:
 	// Called when the game starts or when spawned

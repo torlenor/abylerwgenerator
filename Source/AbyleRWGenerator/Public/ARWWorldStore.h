@@ -20,11 +20,19 @@ public:
 	~UARWWorldStore();
 
     FARWWorldMeshData getWorldMeshData();
+    FARWWorldMeshData getWorldMeshData(const int x, const int y);
 
-    void Setup(const FString& pointsFile);
+    bool Setup(const FString& pointsFile, const FString& heightMapDirectory);
 
 private:
-    bool GetFromFile();
+    bool GetFromFile(FARWWorldMeshData& worldMeshData);
+
+    bool GetFromGridStore(FARWWorldMeshData& worldMeshData, int x, int y);
 
     FString m_pointsFile;
+    FString m_heightMapDirectory;
+
+    bool m_generated;
+
+    FARWWorldMeshData m_worldMeshData;
 };
