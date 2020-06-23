@@ -63,6 +63,11 @@ bool UARWWorldStore::GetFromGridStore(FARWWorldMeshData& worldMeshData, int x, i
     int maxX=501;
     int maxY=501;
 
+    if (worldMeshData.Vertices.Num() != maxX*maxY) {
+    	UE_LOG(LogTemp, Warning, TEXT("Number of vertices do not match the expected number"));
+        return false;
+    }
+
     // TArray<int32> Triangles;
     for (int i=0; i<maxX-1 ; i++) {
         for (int j=0; j<maxY-1 ; j++) {
